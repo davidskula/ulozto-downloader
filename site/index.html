@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <header>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Uložto downloader</title>
+
+        <link rel="stylesheet" href="css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="css/site.css"/>
+        <script type="text/javascript" src="js/knockout-3.5.1.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+    </header>
+    <body>
+        <div class="container">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Queue new download
+                </div>
+                <div class="card-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="dwUrl" placeholder="Url" data-bind="value: dwUrl">
+                        <label for="dwUrl">Url</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="dwDir" placeholder="Directory" data-bind="value: dwDir">
+                        <label for="dwDir">Directory</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" id="dwParts" placeholder="Parts" data-bind="value: dwParts">
+                        <label for="dwParts">Parts</label>
+                    </div>
+                    <button data-bind="click: startDownload" class="btn btn-primary">Download</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bind="click: showActDw, css: {active: actDwActive}">Actual download</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bind="click: showQueue, css: {active: queueActive}">Queue</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bind="click: showHistory, css: {active: historyActive}">History</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div data-bind="visible: actDwActive">
+                        <div class="act-download" data-bind="with: actDw">
+                            <table>
+                                <tr>
+                                    <td>Url:</td>
+                                    <td>
+                                        <span class="ms-2" data-bind="text: url"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Directory:</td>
+                                    <td>
+                                        <span class="ms-2" data-bind="text: out"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>File name:</td>
+                                    <td>
+                                        <span class="ms-2" data-bind="text: file"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Download type:</td>
+                                    <td>
+                                        <span class="ms-2" data-bind="text: type"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Size:</td>
+                                    <td>
+                                        <span class="ms-2" data-bind="text: size"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Captcha:</td>
+                                    <td>
+                                        <span class="ms-2" data-bind="text: captchaState"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tor:</td>
+                                    <td>
+                                        <span class="ms-2" data-bind="text: torState"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Saved:</td>
+                                    <td>
+                                        <span class="ms-2" data-bind="text: savedState"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top;" class="pt-2">Parts:</td>
+                                    <td class="pt-2">
+                                        <div class="ms-2" data-bind="foreach: parts">
+                                            <div data-bind="text: $data"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top;" class="pt-2">Logs:</td>
+                                    <td class="pt-2">
+                                        <div class="ms-2" data-bind="foreach: logs">
+                                            <div data-bind="text: $data"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                   
+                    <div data-bind="visible: queueActive">
+                        <ul class="list-group list-group-flush" data-bind="foreach: queue">
+                            <li class="list-group-item">
+                                <table>
+                                    <tr>
+                                        <td>Url:</td>
+                                        <td>
+                                            <span class="ms-2" data-bind="text: url"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Directory:</td>
+                                        <td>
+                                            <span class="ms-2" data-bind="text: out"></span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </li>
+                        </ul>
+                    </div>
+                    <div data-bind="visible: historyActive">
+                        <ul class="list-group list-group-flush" data-bind="foreach: history">
+                            <li class="list-group-item">
+                                <table>
+                                    <tr>
+                                        <td>Url:</td>
+                                        <td>
+                                            <span class="ms-2" data-bind="text: url"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Directory:</td>
+                                        <td>
+                                            <span class="ms-2" data-bind="text: out"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Error:</td>
+                                        <td>
+                                            <span class="ms-2" data-bind="text: error"></span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    </body>
+</html>

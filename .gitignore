@@ -16,3 +16,5 @@ parser.py
 # Ignore all local history of files
 .history
 .ionide
+.devcontainer
+__pycache__

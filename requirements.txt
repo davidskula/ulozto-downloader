@@ -4,3 +4,5 @@ ansicolors
 numpy
 pysocks
 stem
+fastapi
+uvicorn
